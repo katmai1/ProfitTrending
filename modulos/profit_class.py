@@ -38,9 +38,9 @@ class ProfitTrending:
 
     # canvia la estrategia
     def set_estrategia(self):
+        self.notificacion()
         estrategia = self.config['estrategias'][self.trend_profit]
         self.log(f"Aplicando estrategia '{estrategia}'")
-        # TODO: funcion CURL
         self.send_api(estrategia)
 
     def send_api(self, estrategia):
