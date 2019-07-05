@@ -41,11 +41,11 @@ class ProfitTrending:
         estrategia = self.config['estrategias'][self.trend_profit]
         self.log(f"Aplicando estrategia '{estrategia}'")
         # TODO: funcion CURL
-        # self.send_api()
+        self.send_api(estrategia)
 
-    def send_api(self):
+    def send_api(self, estrategia):
         dominio = f"http://{self.config['ip']}:{self.config['port']}"
-        endpoint = "/settingsapi/config/list"
+        endpoint = f"settingsapi/config/switch?configName={estrategia}"
         licencia = f"?license={self.config['license']}"
         url = dominio + endpoint + licencia
         data = { "Accept": "*/*" }
