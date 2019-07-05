@@ -93,7 +93,7 @@ class ProfitTrending:
         return ta.trending(self.config['timeframe'])
 
     def notificacion(self):
-        stream = miniaudio.stream_file("/home/user/dev/scalpbot/notify.mp3")
+        stream = miniaudio.stream_file("notify.mp3")
         device = miniaudio.PlaybackDevice()
         device.start(stream)
         sleep(2)
