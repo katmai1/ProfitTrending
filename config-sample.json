@@ -1,0 +1,10 @@
+{
+    "ip": "127.0.0.1",
+    "port": 8888,
+    "license": "",
+    "exchange": "binance",
+    "symbol": "BTC/USDT",
+    "timeframe": "5m",
+    "bullish_config_name": "config_name",
+    "bearish_config_name": "config_name2"
+}

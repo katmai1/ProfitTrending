@@ -1,40 +1,51 @@
-import ccxt
-from talib import abstract
-from pandas import DataFrame
+from sys import exit
+from time import sleep
+import json
+
+from modulos.profit_class import ProfitTrending
 
 
-class ProfitTrending:
-
-    def __init__(self, exchange="binance", symbol="BTC/USDT"):
-        self.exchange = exchange
-        self.symbol = symbol
-        self.ex = getattr(ccxt, exchange)({ 'enableRateLimit': True })
-
-    def update_ohlcv(self, timeframe):
-        data = self.ex.fetch_ohlcv(self.symbol, timeframe)
-        df = DataFrame(data, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
-        df.set_index('timestamp', inplace=True, drop=True)
-        self.data = df
-
-    # ─── TA ─────────────────────────────────────────────────────────────────────────
-
-    def _get_func(self, func_name):
-        return abstract.Function(func_name)
-
-    def ema(self, period):
-        funcion = self._get_func('ema')
-        result = funcion(self.data, timeperiod=period)
-        return list(result)[-1]
-
-
+# main
 if __name__ == "__main__":
-    pt = ProfitTrending()
-    pt.update_ohlcv("30m")
     
-    refMA = pt.ema(5)
-    fastMA = pt.ema(34)
-    slowMA = pt.ema(55)
+    # lee config
+    try:
+        with open('config.json', 'r') as file:
+            config = json.load(file)
+            pt = ProfitTrending(config)
+    except Exception as e:
+        print("Error al cargar config.json")
+        exit(e)
 
-    print(refMA)
-    print(fastMA)
-    print(slowMA)
+    # info
+    print("\n###########################################\n")
+    pt.log("Iniciando ProfitTrending")
+    print(f" [i] Exchange: {config['exchange'].capitalize()}")
+    print(f" [i] Trending de {config['symbol']}: {pt.trend_base}")
+    print("    * Este trending es el del moneda que usamos como base para tradear")
+    print()
+    print(f" [i] Trending para el ProfitTrailer: {pt.trend_profit}")
+    print("    * Este es el equivalente en los markets que vamos a usar")
+    print("\n-------------------------------------------------------\n")
+    
+    # asignando estrategia segun la tendencia actual
+    pt.set_estrategia()
+
+    # calcula segundos a esperar segun el timeframe
+    t = { "m": 60, "h": 3600, "d": 86400 }
+    numero = config['timeframe'][:-1]
+    letra = config['timeframe'][-1]
+    segundos_total = int(numero) * t[letra]
+    pausa = segundos_total * 0.25
+    
+    # bucle principal
+    while True:
+        try:
+            pt.run()          
+            sleep(pausa)
+        
+        except KeyboardInterrupt:
+            exit("Saliendo...")
+        
+        except Exception as e:
+            print(f"\n[!] Error: {e}")
