@@ -46,7 +46,7 @@ class ProfitTrending:
     def send_api(self, estrategia):
         dominio = f"http://{self.config['ip']}:{self.config['port']}"
         endpoint = f"/settingsapi/config/switch?configName={estrategia}"
-        licencia = f"?license={self.config['license']}"
+        licencia = f"&license={self.config['license']}"
         url = dominio + endpoint + licencia
         data = { "Accept": "*/*" }
         r = requests.post(url=url, data=data)
