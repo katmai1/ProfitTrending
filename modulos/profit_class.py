@@ -50,7 +50,7 @@ class ProfitTrending:
         url = dominio + endpoint + licencia
         data = { "Accept": "*/*" }
         r = requests.post(url=url, data=data)
-        print(r.text())
+        print(r.text)
 
 
     # imprime mensajes de log
