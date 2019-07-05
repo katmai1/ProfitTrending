@@ -1,3 +1,4 @@
 ccxt
 ta-lib
 pandas
+miniaudio

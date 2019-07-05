@@ -41,7 +41,7 @@ class ProfitTrending:
         estrategia = self.config['estrategias'][self.trend_profit]
         self.log(f"Aplicando estrategia '{estrategia}'")
         # TODO: funcion CURL
-        self.send_api()
+        # self.send_api()
 
     def send_api(self):
         dominio = f"http://{self.config['ip']}:{self.config['port']}"
@@ -50,7 +50,7 @@ class ProfitTrending:
         url = dominio + endpoint + licencia
         data = { "Accept": "*/*" }
         r = requests.post(url=url, data=data)
-        print(r.json())
+        print(r.text())
 
 
     # imprime mensajes de log
